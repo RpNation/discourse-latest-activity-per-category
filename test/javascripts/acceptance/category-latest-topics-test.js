@@ -29,7 +29,7 @@ const latestTopic = {
 
 for (const mobile of [false, true]) {
   acceptance(
-    `Categories with latest topics | ${mobile ? "mobile" : "desktop"}`,
+    `Latest activity per category | ${mobile ? "mobile" : "desktop"}`,
     function (needs) {
       if (mobile) {
         needs.mobileView();

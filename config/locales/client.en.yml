@@ -3,7 +3,7 @@ en:
     admin:
       site_settings:
         categories:
-          discourse_category_latest_topics: "Categories with latest topics"
+          discourse_category_latest_topics: "Latest activity per category"
   js:
     category_page_style:
-      categories_with_latest_topics: "Categories with latest topics"
+      categories_with_latest_topics: "Latest activity per category"

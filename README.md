@@ -1,6 +1,6 @@
-# Categories with latest topics
+# Latest activity per category
 
-Adds **Categories with latest topics** to Discourse's desktop and mobile category-page layout settings. Each category row shows the visible topic with the newest activity, including eligible topics in its subcategories.
+Adds **Latest activity per category** to Discourse's desktop and mobile category-page layout settings. Each category row shows the visible topic with the newest activity, including eligible topics in its subcategories.
 
 Discourse's featured-topic pool can fill with pinned informational topics. Sorting that small pool in a theme cannot find discussions omitted from it. This plugin queries the eligible topics directly and sends the result with the existing category response.
 
@@ -8,7 +8,7 @@ Discourse's featured-topic pool can fill with pinned informational topics. Sorti
 
 1. Install the complete plugin directory as `plugins/discourse-category-latest-topics`, run its migration, and restart Discourse.
 2. Enable `discourse_category_latest_topics_enabled`.
-3. Select **Categories with latest topics** for `desktop_category_page_style`, `mobile_category_page_style`, or both.
+3. Select **Latest activity per category** for `desktop_category_page_style`, `mobile_category_page_style`, or both.
 4. Put `categories` first in `top_menu` if Categories should be the homepage.
 
 Use a current Discourse release. Developed against core `c9d27d5d2e` and its modern model extension API.
