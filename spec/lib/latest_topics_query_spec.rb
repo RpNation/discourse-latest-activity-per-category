@@ -5,17 +5,48 @@ RSpec.describe DiscourseCategoryLatestTopics::LatestTopicsQuery do
   fab!(:category)
 
   describe "#call" do
-    it "uses latest activity with a stable tie-break, excluding local and global pins" do
+    it "uses latest activity with a stable tie-break without giving pins priority" do
       Fabricate(:topic, category: category, bumped_at: 2.days.ago)
       tied = Fabricate(:topic, category: category, bumped_at: 1.day.ago)
       winner = Fabricate(:topic, category: category, bumped_at: tied.bumped_at)
-      pinned = Fabricate(:topic, category: category, pinned_at: 1.hour.ago)
-      Fabricate(:topic, category: category, pinned_at: 1.hour.ago, pinned_globally: true)
+      pinned = Fabricate(:topic, category: category, bumped_at: 2.days.ago, pinned_at: 1.hour.ago)
+      Fabricate(
+        :topic,
+        category: category,
+        bumped_at: 2.days.ago,
+        pinned_at: 1.hour.ago,
+        pinned_globally: true,
+      )
       TopicUser.change(user.id, pinned.id, cleared_pinned_at: Time.current)
 
       result = described_class.new(guardian: user.guardian, category_ids: [category.id]).call
 
       expect(result.map(&:id)).to eq([winner.id])
+    end
+
+    it "includes local and global pins when their activity is newest, even after dismissal" do
+      Fabricate(:topic, category: category, bumped_at: 3.days.ago)
+      pinned = Fabricate(:topic, category: category, bumped_at: 1.day.ago, pinned_at: 1.hour.ago)
+      global_pin =
+        Fabricate(
+          :topic,
+          category: category,
+          bumped_at: 2.days.ago,
+          pinned_at: 1.hour.ago,
+          pinned_globally: true,
+        )
+
+      result = described_class.new(guardian: user.guardian, category_ids: [category.id]).call
+      expect(result.map(&:id)).to eq([pinned.id])
+
+      TopicUser.change(user.id, pinned.id, cleared_pinned_at: Time.current)
+      result = described_class.new(guardian: user.guardian, category_ids: [category.id]).call
+      expect(result.map(&:id)).to eq([pinned.id])
+
+      global_pin.update!(bumped_at: Time.current)
+      TopicUser.change(user.id, global_pin.id, cleared_pinned_at: Time.current)
+      result = described_class.new(guardian: user.guardian, category_ids: [category.id]).call
+      expect(result.map(&:id)).to eq([global_pin.id])
     end
 
     it "excludes definitions, deleted topics, unlisted topics, messages, and shared drafts" do
@@ -114,7 +145,10 @@ RSpec.describe DiscourseCategoryLatestTopics::LatestTopicsQuery do
       grandchild = Fabricate(:category, parent_category: child)
       winner = Fabricate(:topic, category: grandchild)
       guardian = user.guardian
-      described_class.new(guardian: guardian, category_ids: [category.id]).call.to_a
+      described_class
+        .new(guardian: guardian, category_ids: [category.id, child.id, grandchild.id])
+        .call
+        .to_a
 
       one_category_queries =
         track_sql_queries do
