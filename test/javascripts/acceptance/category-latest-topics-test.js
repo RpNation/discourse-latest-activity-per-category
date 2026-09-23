@@ -104,9 +104,7 @@ for (const mobile of [false, true]) {
           .exists("the latest topic renders");
         assert
           .dom('.category-list [data-topic-id="45673"]')
-          .doesNotExist(
-            "the native featured pool does not override the server winner"
-          );
+          .doesNotExist("pins do not render in latest slots");
         category.set("description_excerpt", "Updated category description");
         await settled();
         assert.strictEqual(
@@ -114,15 +112,6 @@ for (const mobile of [false, true]) {
           selected,
           "retains topic identity across renders"
         );
-      });
-
-      test("renders a pinned topic when the server selects it by activity", async function (assert) {
-        winners[0].pinned = true;
-        await visit("/categories");
-        assert
-          .dom(`.category-list [data-topic-id="${latestTopic.id}"]`)
-          .exists("the newest pinned discussion renders normally");
-        assert.true(Category.findById(1).featuredTopics[0].pinned, "pin metadata is preserved without affecting selection");
       });
 
       test("an empty latest pool never falls back to a pin", async function (assert) {

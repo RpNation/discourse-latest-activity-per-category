@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # name: discourse-category-latest-topics
-# about: Show the topic with the latest activity in each category row.
-# version: 0.2.0
+# about: Show the latest unpinned topic in each category row.
+# version: 0.1.0
 # authors: RpNation
 # url: https://github.com/RpNation/discourse-category-latest-topics
 # required_version: 2026.3.0
