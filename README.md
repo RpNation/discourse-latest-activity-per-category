@@ -1,4 +1,4 @@
-# **Plugin Name** Plugin
+# **Discourse Category Latest Topics** Plugin
 
 **Plugin Summary**
 

@@ -3,7 +3,7 @@ en:
     admin:
       site_settings:
         categories:
-          TODO_plugin_name: "Plugin Name"
+          discourse_category_latest_topics: "Discourse Category Latest Topics"
   js:
-    discourse_plugin_name:
+    discourse_category_latest_topics:
       placeholder: placeholder
