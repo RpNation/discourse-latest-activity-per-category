@@ -3,7 +3,7 @@ en:
     admin:
       site_settings:
         categories:
-          discourse_category_latest_topics: "Discourse Category Latest Topics"
+          discourse_category_latest_topics: "Categories with latest topics"
   js:
-    discourse_category_latest_topics:
-      placeholder: placeholder
+    category_page_style:
+      categories_with_latest_topics: "Categories with latest topics"
