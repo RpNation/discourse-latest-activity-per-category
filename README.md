@@ -1,6 +1,6 @@
 # Categories with latest topics
 
-Adds **Categories with latest topics** to Discourse's desktop and mobile category-page layout settings. Each category row shows the visible, unpinned topic with the newest activity, including eligible topics in its subcategories.
+Adds **Categories with latest topics** to Discourse's desktop and mobile category-page layout settings. Each category row shows the visible topic with the newest activity, including eligible topics in its subcategories.
 
 Discourse's featured-topic pool can fill with pinned informational topics. Sorting that small pool in a theme cannot find discussions omitted from it. This plugin queries the eligible topics directly and sends the result with the existing category response.
 
@@ -18,10 +18,10 @@ The native category-row renderer is reused, including last-poster information, u
 ## Selection rules
 
 - Latest means greatest `bumped_at`, with the topic ID breaking ties. A reply can make an older discussion the latest.
-- Pinned topics are excluded, including global pins and pins a reader has dismissed. Category-description topics are excluded too.
+- Pins compete by activity like any other topic: an older pin falls behind newer discussions, while a recently active pin can be the winner. Pinning or dismissing a pin gives it no special priority. Category-description topics are excluded.
 - Discourse's native topic query enforces permissions, visibility, deleted-topic exclusion, personal-message exclusion, shared-draft rules, and muted topics/categories/tags.
 - A parent can show the latest eligible discussion from an accessible descendant. Category nesting remains unchanged.
-- A category without an eligible discussion has an empty latest slot. It does not fall back to a pinned topic.
+- A category without an eligible discussion has an empty latest slot. It does not fall back to the native featured-topic pool.
 - One result is returned per category, independently of `num_featured_topics` and the featured-topic count setting.
 - Category order and the native large-category-site layout fallback are unchanged.
 
@@ -33,7 +33,9 @@ style applies to the Categories page and native subcategory-directory route.
 
 The existing category response gains `category_latest_topics`, an array containing zero or one topic serialized by Discourse's native `ListableTopicSerializer`. The original `topics` array stays intact, so desktop and mobile can choose different layouts. The selected layout hydrates the separate result into native Topic models, preserving topic identity between renders.
 
-The query uses bounded category-descendant searches and one indexed latest-topic candidate per descendant, then selects the newest candidate for each displayed row. It does not fetch the whole topic history into Ruby. A concurrent partial index supports the activity lookup on eligible topics. Plugin migrations must finish before enabling the feature on a production-sized site.
+The query uses Discourse's distributed `Category.subcategory_ids` cache for structural descendant IDs. Core invalidates it when categories are saved or destroyed and when the maximum nesting setting changes. Each root's first lookup after invalidation populates its cache entry; subsequent requests reuse it. Only structural IDs are cached: topics, permissions, and mute filtering remain fresh for every request.
+
+The cached IDs feed one indexed latest-topic candidate search per descendant, followed by selection of the newest candidate for each displayed row. The query does not fetch the whole topic history into Ruby or rebuild the category hierarchy on every request. A concurrent partial index supports the activity lookup on eligible topics, including pins. Run plugin migrations when upgrading from version 0.1.0 to replace the original unpinned-only index.
 
 No extra HTTP requests, scheduled jobs, or rebakes are required. Refreshing the Categories page fetches the current selection; this does not add live push updates.
 

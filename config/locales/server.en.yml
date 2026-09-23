@@ -1,5 +1,5 @@
 en:
   site_settings:
-    discourse_category_latest_topics_enabled: "Enable the Categories with latest topics layout. Select it in {{setting:desktop_category_page_style}} or {{setting:mobile_category_page_style}} to show the latest unpinned topic from each category and its accessible subcategories. Muted topics and categories are respected."
+    discourse_category_latest_topics_enabled: "Enable the Categories with latest topics layout. Select it in {{setting:desktop_category_page_style}} or {{setting:mobile_category_page_style}} to show the topic with the newest activity from each category and its accessible subcategories. Pins receive no special priority. Muted topics and categories are respected."
   category_page_style:
     categories_with_latest_topics: "Categories with latest topics"
