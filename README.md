@@ -6,10 +6,14 @@ Discourse's featured-topic pool can fill with pinned informational topics. Sorti
 
 ## Setup
 
-1. Install the complete plugin directory as `plugins/discourse-category-latest-topics`, run its migration, and restart Discourse.
+1. Install [the plugin](https://github.com/RpNation/discourse-latest-activity-per-category) as `plugins/discourse-latest-activity-per-category`, run its migration, and restart Discourse.
 2. Enable `discourse_category_latest_topics_enabled`.
 3. Select **Latest activity per category** for `desktop_category_page_style`, `mobile_category_page_style`, or both.
 4. Put `categories` first in `top_menu` if Categories should be the homepage.
+
+Existing installations can keep the `discourse-category-latest-topics` directory.
+Update its Git remote to the new repository URL rather than installing a second
+copy. The plugin's internal identifier and saved setting keys are unchanged.
 
 Use a current Discourse release. Developed against core `c9d27d5d2e` and its modern model extension API.
 
@@ -53,7 +57,7 @@ Before removing the plugin, switch both category page styles back to native valu
 Generated using Discourse's official plugin scaffold and reusable CI workflow.
 
 ```sh
-LOAD_PLUGINS=1 bin/rspec plugins/discourse-category-latest-topics/spec
-bin/qunit --standalone --target discourse-category-latest-topics
-bin/lint --fix plugins/discourse-category-latest-topics/path/to/changed-file
+LOAD_PLUGINS=1 bin/rspec plugins/discourse-latest-activity-per-category/spec
+bin/qunit --standalone --target discourse-latest-activity-per-category
+bin/lint --fix plugins/discourse-latest-activity-per-category/path/to/changed-file
 ```

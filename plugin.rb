@@ -4,7 +4,7 @@
 # about: Show the topic with the latest activity in each category row.
 # version: 0.2.0
 # authors: RpNation
-# url: https://github.com/RpNation/discourse-category-latest-topics
+# url: https://github.com/RpNation/discourse-latest-activity-per-category
 # required_version: 2026.3.0
 
 enabled_site_setting :discourse_category_latest_topics_enabled

@@ -122,7 +122,10 @@ for (const mobile of [false, true]) {
         assert
           .dom(`.category-list [data-topic-id="${latestTopic.id}"]`)
           .exists("the newest pinned discussion renders normally");
-        assert.true(Category.findById(1).featuredTopics[0].pinned, "pin metadata is preserved without affecting selection");
+        assert.true(
+          Category.findById(1).featuredTopics[0].pinned,
+          "pin metadata is preserved without affecting selection"
+        );
       });
 
       test("an empty latest pool never falls back to a pin", async function (assert) {
